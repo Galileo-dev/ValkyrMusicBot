@@ -3,7 +3,7 @@ import { Payload } from "../interfaces/Payload.ts";
 import ClientUser from "../client/ClientUser.ts";
 export default function (client: Client, payload: Payload) {
   console.log("Logged  in");
-  console.log(payload);
+  //console.log(payload);
   const { d } = payload;
   const { username, discriminator, verified, id, flags, email, bot, avatar } =
     d.user;
@@ -17,5 +17,5 @@ export default function (client: Client, payload: Payload) {
     bot,
     avatar,
   );
-  console.log(client);
+  client.emit("ready");
 }

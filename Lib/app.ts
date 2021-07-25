@@ -5,6 +5,7 @@
 //!------------------------------- BOT_TOKEN=TOKEN ---------------------------------------
 //?=======================================================================================
 import { config } from "https://deno.land/x/dotenv/mod.ts";
+
 import Client from "./src/client/Client.ts";
 const env = config();
 
@@ -14,4 +15,12 @@ client.login(env.BOT_TOKEN);
 
 client.on("ready", () => {
   console.log("Bot has logged in.");
+});
+
+client.on("message", async (message: any) => {
+  if (message.content === "hello") {
+    await client.send("Hello there", message.channel_id);
+    //await createMessage("I am a bot", message.channel_id);
+  }
+  console.log(message.content);
 });
