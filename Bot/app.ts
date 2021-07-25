@@ -4,10 +4,13 @@
 // !------------ CONTENTS OF .env in root directory should look like this ----------------
 //!------------------------------- BOT_TOKEN=TOKEN ---------------------------------------
 //?=======================================================================================
+
+//?======================================= Imports =======================================
 import { config } from "https://deno.land/x/dotenv/mod.ts";
 import EventEmitter from "https://deno.land/x/events/mod.ts";
-
 import { Client } from "../Lib/mod.ts";
+//?=======================================================================================
+
 const env = config();
 
 const client = new Client();
@@ -20,7 +23,7 @@ client.on("ready", () => {
 
 client.on("message", async (message: any) => {
   if (message.content === "hello") {
-    await client.send("Hello there", message.channel_id);
+    await client.send("Your Mom", message.channel_id);
   }
   console.log(message.content);
 });
