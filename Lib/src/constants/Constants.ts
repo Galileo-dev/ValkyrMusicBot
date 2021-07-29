@@ -3,6 +3,11 @@ export enum Constants {
   API = "https://discord.com/api/v9",
 }
 
+export enum VoiceChannelTemp {
+  channel_id = "749343186215763983",
+  guild_id = "749343186215763979",
+}
+
 export enum OPCODE {
   ZERO = 0,
   ONE = 1,

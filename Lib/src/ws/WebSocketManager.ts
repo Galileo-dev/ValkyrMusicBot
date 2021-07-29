@@ -2,20 +2,22 @@ import { Constants, OPCODE } from "../constants/Constants.ts";
 import { Payload } from "../interfaces/Payload.ts";
 import { HeartBeat, Hello, Identify } from "../constants/Payloads.ts";
 import Client from "../client/Client.ts";
+import Cache from "../cache/util.ts";
 
 export default class WebSocketManger {
   private socket!: WebSocket;
-  private interval: number = 0;
+  private interval = 0;
+  public cache: Cache = new Cache();
 
   constructor(private client: Client) {
   }
-
   connect(token: string) {
     try {
       this.socket = new WebSocket(Constants.GATEWAY);
       this.socket.onmessage = async (message: any) => {
         const payload: Payload = JSON.parse(message.data);
         const { t: event, op } = payload;
+        console.log(event);
         switch (op) {
           case OPCODE.ZERO:
             console.log("An event was triggered...");
@@ -29,11 +31,10 @@ export default class WebSocketManger {
           case OPCODE.ELEVEN:
             break;
         }
-
         if (event) {
           try {
             const { default: module } = await import(`../handlers/${event}.ts`);
-            module(this.client, payload);
+            module(this.client, payload, this.cache);
             console.log(event);
           } catch (err) {
             console.log(err);
@@ -44,6 +45,15 @@ export default class WebSocketManger {
     } catch (err) {
       console.error(`Error Connecting: ${err}`);
       return err;
+    }
+  }
+
+  sendToGateway(data: string) {
+    try {
+      this.socket.send(data);
+    } catch (err) {
+      console.log("Failed to send to gateway");
+      console.log("err");
     }
   }
 

@@ -8,10 +8,11 @@
 //?======================================= Imports =======================================
 import { config } from "https://deno.land/x/dotenv/mod.ts";
 import EventEmitter from "https://deno.land/x/events/mod.ts";
-import { Client } from "../Lib/mod.ts";
+import { Client, VoiceClient } from "../Lib/mod.ts";
 //?=======================================================================================
 
 const env = config();
+const suffix = "?";
 
 const client = new Client();
 
@@ -22,8 +23,18 @@ client.on("ready", () => {
 });
 
 client.on("message", async (message: any) => {
+  if (message.author.username === "Simple-Bot") {
+    return;
+  }
+  console.log(message);
+
   if (message.content === "hello") {
     await client.send("Your Mom", message.channel_id);
+  } else if (message.content === `${suffix}play`) {
+    // const VoiceChannel = await client.getVoiceChannel(message);
+    const voice = await new VoiceClient();
+    await voice.connect(client);
+    // await voice.play("../test_music.mp3");
+    // await client.send("Playing Song ${}", message.channel_id);
   }
-  console.log(message.content);
 });
